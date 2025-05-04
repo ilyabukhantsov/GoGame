@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Go Game - Login/Register</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Welcome to Go Game</h1>
+
+    <!-- 🔐 Регистрация (изначально скрыта) -->
+    <div id="register" style="display: none">
+      <h2>Register</h2>
+      <input type="text" id="regUsername" placeholder="Username" />
+      <input type="password" id="regPassword" placeholder="Password" />
+      <button id="registerBtn">Register</button>
+      <div class="toggle-link" onclick="toggleForms()">
+        Already have an account?
+      </div>
+    </div>
+
+    <!-- 🔑 Логин -->
+    <div id="login">
+      <h2>Login</h2>
+      <input type="text" id="loginUsername" placeholder="Username" />
+      <input type="password" id="loginPassword" placeholder="Password" />
+      <button id="loginBtn">Login</button>
+      <div class="toggle-link" onclick="toggleForms()">No account?</div>
+    </div>
+
+    <!-- 🎮 Игровая доска -->
+    <div id="game" style="display: none">
+      <h2>Game Board</h2>
+      <div id="board" class="board"></div>
+    </div>
+
+    <script type="module">
+      import { login } from "./app/auth.js";
+      import { connectWebSocket } from "./app/socket.js";
+      import { createBoard } from "./app/game.js";
+
+      document.getElementById("loginBtn").onclick = async () => {
+        const username = document.getElementById("loginUsername").value;
+        const password = document.getElementById("loginPassword").value;
+
+        const token = await login(username, password);
+        if (token) {
+          connectWebSocket(token);
+          createBoard(19);
+          document.getElementById("login").style.display = "none";
+          document.getElementById("register").style.display = "none";
+          document.getElementById("game").style.display = "block";
+        }
+      };
+
+      document.getElementById("registerBtn").onclick = async () => {
+        const username = document.getElementById("regUsername").value;
+        const password = document.getElementById("regPassword").value;
+
+        const res = await fetch("http://localhost:5000/api/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          alert("Registered successfully! Now log in.");
+        } else {
+          alert(data.message || "Registration failed");
+        }
+      };
+    </script>
+    <script>
+      function toggleForms() {
+        const reg = document.getElementById("register");
+        const log = document.getElementById("login");
+        const isRegistering = reg.style.display === "block";
+        reg.style.display = isRegistering ? "none" : "block";
+        log.style.display = isRegistering ? "block" : "none";
+      }
+    </script>
+  </body>
+</html>
