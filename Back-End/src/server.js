@@ -1,33 +1,30 @@
-// src/server.js
+const express = require("express");
 const http = require("http");
 const WebSocket = require("ws");
 const mongoose = require("mongoose");
-const setupWebSocket = require("./ws/wsServer"); // Подключение правильно
+const setupWebSocket = require("./ws/wsServer");
 require("dotenv").config();
+
+const app = express();
+const PORT = process.env.PORT || 5000;
 const uri = process.env.MONGO_URI;
 
-// Настройка порта и HTTP-сервера
-const PORT = 5000;
-const server = http.createServer((req, res) => {
-  res.writeHead(200);
-  res.end("This shit working, funny yea?.");
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("This shit working, funny yea?");
 });
 
-// Подключение к MongoDB
+const server = http.createServer(app);
+
 mongoose
   .connect(uri)
-  .then(() => {
-    console.log("✅ MongoDB connected");
-  })
-  .catch((err) => {
-    console.error("❌ MongoDB connection error:", err);
-  });
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// Настройка WebSocket
 const wss = new WebSocket.Server({ server });
-setupWebSocket(wss); // Здесь вызываем
+setupWebSocket(wss);
 
-// Запуск сервера
 server.listen(PORT, () => {
   console.log(`🚀 Server is running at http://localhost:${PORT}`);
 });
