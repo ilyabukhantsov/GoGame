@@ -2,6 +2,7 @@ const express = require("express");
 const http = require("http");
 const WebSocket = require("ws");
 const mongoose = require("mongoose");
+const authRouter = require("./routes/authRouter");
 const setupWebSocket = require("./ws/wsServer");
 require("dotenv").config();
 
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 5000;
 const uri = process.env.MONGO_URI;
 
 app.use(express.json());
+app.use("/auth", authRouter);
 
 app.get("/", (req, res) => {
   res.send("This shit working, funny yea?");
