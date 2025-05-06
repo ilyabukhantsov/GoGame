@@ -1,3 +1,4 @@
+//authController
 class authController {
   async registration(req, res) {
     try {
@@ -13,3 +14,5 @@ class authController {
     } catch (e) {}
   }
 }
+
+module.exports = new authController();
