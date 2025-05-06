@@ -3,6 +3,8 @@ const http = require("http");
 const WebSocket = require("ws");
 const mongoose = require("mongoose");
 const setupWebSocket = require("./ws/wsServer"); // Подключение правильно
+require("dotenv").config();
+const uri = process.env.MONGO_URI;
 
 // Настройка порта и HTTP-сервера
 const PORT = 5000;
@@ -13,7 +15,7 @@ const server = http.createServer((req, res) => {
 
 // Подключение к MongoDB
 mongoose
-  .connect("mongodb://127.0.0.1:27017/go-game")
+  .connect(uri)
   .then(() => {
     console.log("✅ MongoDB connected");
   })
