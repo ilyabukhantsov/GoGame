@@ -15,7 +15,11 @@ app.use(express.json());
 app.use("/auth", authRouter);
 
 app.get("/", (req, res) => {
-  res.send("This shit working, funny yea?");
+  if (req.session.username) {
+    res.sendFile(path.join(__dirname, "public", "lobby.html"));
+  } else {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+  }
 });
 
 const server = http.createServer(app);
