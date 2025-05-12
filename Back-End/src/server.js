@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const authRouter = require("./routes/authRouter");
 const setupWebSocket = require("./ws/wsServer");
 require("dotenv").config();
+const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -13,13 +14,10 @@ const uri = process.env.MONGO_URI;
 
 app.use(express.json());
 app.use("/auth", authRouter);
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
-  if (req.session.username) {
-    res.sendFile(path.join(__dirname, "public", "lobby.html"));
-  } else {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
-  }
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 const server = http.createServer(app);

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Go Game Lobby</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Welcome to <span class="highlight">Go Game</span></h1>
+    </header>
+
+    <div class="container">
+      <!-- Left panel: Auth (Login/Register) -->
+      <div class="panel left-panel">
+        <div id="auth-form"></div>
+      </div>
+
+      <!-- Right panel: Lobby -->
+      <div class="panel right-panel">
+        <div id="user-info" class="user-info"></div>
+        <h2>Lobby</h2>
+        <button onclick="createLobby()">Create Lobby</button>
+        <input type="text" id="lobby-id" placeholder="Enter Lobby ID" />
+        <button onclick="joinLobby()">Join Lobby</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
